@@ -10,3 +10,9 @@ var express = require("express"),
 router.get("/", function (req, res) {
     res.render("schedule");
 });
+
+router.post("/", function (req, res) {
+
+});
+
+module.exports = router;

@@ -1,3 +1,49 @@
-<%- include('partials/header') %>
+<%- include('partials/header') -%>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<div class="container">
+    <form id="scheduleForm">
+        <div class="form-list">
+            <div class="form-row row">
+                <div class="col-md-2 form-group label-floating">
+                    <label class="control-label">Class Name</label>
+                    <input type="text" class="form-control" v-model="act">
+                </div>
+                <div class="col-md-2 form-group label-floating">
+                    <label class="control-label">Start Time</label>
+                    <input type="time" class="form-control" v-model="section">
+                </div>
+                <div class="col-md-2 form-group label-floating">
+                    <label class="control-label">End Time</label>
+                    <input type="time" class="form-control" v-model="section">
+                </div>
+                <div class="col-md-2 form-group label-floating">
+                    <label class="control-label">Location</label>
+                    <input type="text" class="form-control" v-model="section">
+                </div>
+                <div class="col-md-2 form-group label-floating">
+                    <label class="control-label">Weekdays</label>
+                    <input type="text" class="form-control" v-model="section">
+                </div>
+                <div class="col-md-1 form-group label-floating">
+                    <button type="button" class="btn btn-success" onclick="addFormElements(this)">+</button>
+                </div>
+                <div class="col-md-1 form-group">
+                    <button type="button" class="btn btn-danger" onclick="removeFormElements(this)">-</button>
+                </div>
+            </div>
+        </div>
+    </form>
 
-<%- include('partials/footer') %>
+    <button>Submit</button>
+</div>
+<script>
+    function addFormElements(current) {
+        $(current).parents('.form-list').append($(current).parents('.form-row').clone())
+    }
+
+    function removeFormElements(current) {
+        $(current).parents('.form-row').remove();
+    }
+</script>
+<%- include('partials/footer') -%>

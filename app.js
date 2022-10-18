@@ -30,13 +30,13 @@ mongoose.connect("mongodb://localhost:27017/cwru_sns", {
 // }).catch(err => {
 //   console.log("ERROR:", err.message);
 // });
-// app.set("view engine", "ejs");
-// app.use('/scripts', express.static(__dirname + '/node_modules'));
-// app.use(express.static("public"));
-// app.use(express.static("uploads"));
-// app.use(bodyParser.urlencoded({
-//   extended: true
-// }));
+app.set("view engine", "ejs");
+app.use('/scripts', express.static(__dirname + '/node_modules'));
+app.use(express.static("public"));
+app.use(express.static("uploads"));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(methodOverride("_method"));
 app.use(flash());
 app.locals.moment = require("moment");
@@ -60,8 +60,9 @@ app.use(function (req, res, next) {
 });
 
 //ROUTES
+app.use("/schedule", scheduleRoutes);
 app.use(indexRoutes);
-app.use("/schedule", scheduleRoutes)
+
 
 //ERROR HADNLING
 app.use(function (req, res, next) {
