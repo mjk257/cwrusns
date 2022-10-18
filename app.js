@@ -16,27 +16,27 @@ var indexRoutes = require("./routes/index"),
 
 
 // APP CONFIG
-// mongoose.connect("mongodb://localhost:27017/cwru_sns", {
-//   useNewUrlParser: true,
-//   useCreateIndex: true,
-//   useFindAndModify: false
-// });
-mongoose.connect("mongodb+srv://admin:W1llmgEj0SdeZTQw@cluster0.rlpardo.mongodb.net/?retryWrites=true&w=majority", {
+mongoose.connect("mongodb://localhost:27017/cwru_sns", {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false
-}).then(() => {
-  console.log("Connected to DB");
-}).catch(err => {
-  console.log("ERROR:", err.message);
 });
-app.set("view engine", "ejs");
-app.use('/scripts', express.static(__dirname + '/node_modules'));
-app.use(express.static("public"));
-app.use(express.static("uploads"));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+// mongoose.connect("mongodb+srv://admin:W1llmgEj0SdeZTQw@cluster0.rlpardo.mongodb.net/?retryWrites=true&w=majority", {
+//   useNewUrlParser: true,
+//   useCreateIndex: true,
+//   useFindAndModify: false
+// }).then(() => {
+//   console.log("Connected to DB");
+// }).catch(err => {
+//   console.log("ERROR:", err.message);
+// });
+// app.set("view engine", "ejs");
+// app.use('/scripts', express.static(__dirname + '/node_modules'));
+// app.use(express.static("public"));
+// app.use(express.static("uploads"));
+// app.use(bodyParser.urlencoded({
+//   extended: true
+// }));
 app.use(methodOverride("_method"));
 app.use(flash());
 app.locals.moment = require("moment");
