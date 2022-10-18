@@ -1,7 +1,9 @@
 var express = require("express"),
   router = express.Router(),
   passport = require("passport"),
-  User = require("../models/user"),
+  {
+    User
+  } = require("../models/user"),
   async = require("async"),
     nodemailer = require("nodemailer"),
     crypto = require("crypto"),
@@ -12,7 +14,21 @@ router.get("/error", function (req, res) {
 });
 
 router.get("/", function (req, res) {
-  res.render("index");
+  User.findById(req.params.id, function (err, foundUser) {
+    if (err) {
+      res.render("index");
+    } else {
+      if (foundUser && foundUser.schedule != null) {
+        res.render("index", {
+          schedule: foundUser.schedule
+        })
+      } else {
+        res.render("index", {
+          schedule: Array()
+        });
+      }
+    }
+  })
 });
 
 
@@ -24,12 +40,10 @@ router.get("/register", function (req, res) {
 });
 
 router.post("/register", function (req, res) {
-  if (req.body.password === req.body.passwordC && req.body.key === "Spicy Ramen" && req.body.email === req.body.emailC) {
+  if (req.body.password === req.body.passwordC) {
     User.register(new User({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      username: req.body.username,
-      email: req.body.email
+      email: req.body.email,
+      schedule: [],
     }), req.body.password, function (err, user) {
       if (err) {
         console.log(err);
@@ -41,7 +55,7 @@ router.post("/register", function (req, res) {
     })
   } else {
     res.redirect("/register")
-    req.flash("error", "Passwords Did Not Match or Key Incorect");
+    req.flash("error", "Passwords Did Not Match");
   }
 });
 

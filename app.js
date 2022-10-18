@@ -9,7 +9,9 @@ var express = require("express"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
   passportLocalMongoose = require("passport-local-mongoose"),
-  User = require("./models/user")
+  {
+    User
+  } = require("./models/user")
 
 var indexRoutes = require("./routes/index"),
   scheduleRoutes = require("./routes/schedule");
@@ -19,12 +21,14 @@ var indexRoutes = require("./routes/index"),
 mongoose.connect("mongodb://localhost:27017/cwru_sns", {
   useNewUrlParser: true,
   useCreateIndex: true,
-  useFindAndModify: false
+  useFindAndModify: false,
+  useUnifiedTopology: true
 });
 // mongoose.connect("mongodb+srv://admin:W1llmgEj0SdeZTQw@cluster0.rlpardo.mongodb.net/?retryWrites=true&w=majority", {
 //   useNewUrlParser: true,
 //   useCreateIndex: true,
-//   useFindAndModify: false
+//   useFindAndModify: false,
+//   useUnifiedTopology: true
 // }).then(() => {
 //   console.log("Connected to DB");
 // }).catch(err => {

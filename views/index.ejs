@@ -1,6 +1,11 @@
 <%- include('partials/header'); -%>
-<% if(currentUser && !currentUser.schedule.equals(null)){ %>
-
+<% if(currentUser){ %>
+<% if(schedule.length > 0) { %>
+<% } else {%>
+<div class="container-fluid">
+    <a href="/schedule">Input your schedule to get started!</a>
+</div>
+<% } %>
 <% } else { %>
 <div class="container-fluid">
     <a href="/schedule">Input your schedule to get started!</a>
