@@ -1,3 +1,10 @@
 <%- include('partials/header'); -%>
+<% if(currentUser && !currentUser.schedule.equals(null)){ %>
 
+<% } else { %>
+<div class="container-fluid">
+    <a href="">Input your schedule to get started!</a>
+</div>
+
+<% } %>
 <%- include ('partials/footer'); -%>

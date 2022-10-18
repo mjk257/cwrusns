@@ -11,23 +11,25 @@ var express = require("express"),
   passportLocalMongoose = require("passport-local-mongoose"),
   User = require("./models/user")
 
-var indexRoutes = require("./routes/index");
+var indexRoutes = require("./routes/index"),
+  scheduleRoutes = require("./routes/schedule");
+
 
 // APP CONFIG
-mongoose.connect("mongodb://localhost:27017/cwru_sns", {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false
-});
-// mongoose.connect("mongodb+srv://admin:W1llmgEj0SdeZTQw@cluster0.rlpardo.mongodb.net/?retryWrites=true&w=majority", {
+// mongoose.connect("mongodb://localhost:27017/cwru_sns", {
 //   useNewUrlParser: true,
 //   useCreateIndex: true,
 //   useFindAndModify: false
-// }).then(() => {
-//   console.log("Connected to DB");
-// }).catch(err => {
-//   console.log("ERROR:", err.message);
 // });
+mongoose.connect("mongodb+srv://admin:W1llmgEj0SdeZTQw@cluster0.rlpardo.mongodb.net/?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+}).then(() => {
+  console.log("Connected to DB");
+}).catch(err => {
+  console.log("ERROR:", err.message);
+});
 app.set("view engine", "ejs");
 app.use('/scripts', express.static(__dirname + '/node_modules'));
 app.use(express.static("public"));
@@ -59,6 +61,7 @@ app.use(function (req, res, next) {
 
 //ROUTES
 app.use(indexRoutes);
+app.use("/schedule", scheduleRoutes)
 
 //ERROR HADNLING
 app.use(function (req, res, next) {
