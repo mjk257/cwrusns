@@ -1,8 +1,17 @@
 <%- include('partials/header'); -%>
 <% if(currentUser){ %>
-<% if(schedule.length > 0) { %>
-<% } else {%>
-<div class="container-fluid">
+<% if(currentUser.schedule.length > 0) { %>
+<% currentUser.schedule.forEach(function(course){ %>
+<div class="row">
+    <div class="col-md-2"><%= course.name %></div>
+    <div class="col-md-2"><%= course.startTime %> - <%= course.endTime %></div>
+    <div class="col-md-2">
+        <% course.days.forEach(function(day){ %>
+        <p><%= day %>, </p>
+        <% }); %>
+    </div>
+    <div class="col-md-2"><%= course.location %></div>
+</div> <% }); %> <% } else {%> <div class="container-fluid">
     <a href="/schedule">Input your schedule to get started!</a>
 </div>
 <% } %>

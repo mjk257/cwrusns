@@ -1,9 +1,7 @@
 var express = require("express"),
   router = express.Router(),
   passport = require("passport"),
-  {
-    User
-  } = require("../models/user"),
+  User = require("../models/user"),
   async = require("async"),
     nodemailer = require("nodemailer"),
     crypto = require("crypto"),
@@ -83,8 +81,12 @@ router.post('/login', function (req, res, next) {
 });
 
 router.get("/logout", function (req, res) {
-  req.logout();
-  res.redirect("/");
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
 });
 
 

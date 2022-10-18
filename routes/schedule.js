@@ -1,31 +1,21 @@
 var express = require("express"),
     router = express.Router(),
     passport = require("passport"),
-    {
-        User
-    } = require("../models/user"),
-    {
-        Course
-    } = require("../models/user")
-async = require("async"),
-    nodemailer = require("nodemailer"),
-    crypto = require("crypto"),
-    middleware = require("../middleware");
+    User = require("../models/user"),
+
+    async = require("async"),
+        nodemailer = require("nodemailer"),
+        crypto = require("crypto"),
+        middleware = require("../middleware");
 
 router.get("/", function (req, res) {
     User.findById(req.params.id, function (err, foundUser) {
         if (err) {
-            res.render("schedule");
+            res.redirect("/error")
         } else {
-            if (foundUser && foundUser.schedule != null) {
-                res.render("schedule", {
-                    schedule: foundUser.schedule
-                })
-            } else {
-                res.render("schedule", {
-                    schedule: Array()
-                });
-            }
+            res.render("/", {
+                user: foundUser
+            });
         }
     })
 });
@@ -42,7 +32,7 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
         _id: req.user._id
     }, {
         $push: {
-            schedule: Course.create(course)
+            schedule: course
         }
     }, function (err, newlyCreated) {
         if (err) {

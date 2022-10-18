@@ -9,9 +9,7 @@ var express = require("express"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
   passportLocalMongoose = require("passport-local-mongoose"),
-  {
-    User
-  } = require("./models/user")
+  User = require("./models/user")
 
 var indexRoutes = require("./routes/index"),
   scheduleRoutes = require("./routes/schedule");
