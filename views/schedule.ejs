@@ -1,14 +1,36 @@
 <%- include('partials/header') -%>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"
     integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<% if(currentUser && currentUser.schedule.length > 0) {%>
 <div class="container">
-    <h3>Current Schedule</h3>
-    <% schedule.forEach(function(course){ %>
-    <div class="row">
-        <div class="col-md-2"><% course.name %></div>
-    </div>
-    <% }); %>
+    <table class="table">
+        <thead>
+            <th scope="col">Class Name</th>
+            <th scope="col">Time</th>
+            <th scope="col">Building</th>
+            <th scope="col">Days</th>
+        </thead>
+        <tbody>
+            <% currentUser.schedule.forEach(function(course){ %>
+            <tr>
+                <td scope="row" name="name"><%= course.name %></td>
+                <td><%= course.startTime %> - <%= course.endTime %></td>
+                <td><%= course.location %></td>
+                <td> <% course.days.forEach(function(day){ %>
+                    <%= day %>,
+                    <% }); %></td>
+                <td>
+                    <form action="/schedule/<%= course._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">X</button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
 </div>
+</br>
+<% } %>
 <div class="container">
     <form id="scheduleForm" action="/schedule" method="POST">
         <div class="form-list">
@@ -26,7 +48,7 @@
                     <input type="time" class="form-control" v-model="section" name="end">
                 </div>
                 <div class="col-md-2 form-group label-floating">
-                    <label class="control-label">Location</label>
+                    <label class="control-label">Building</label>
                     <select class="form-control" v-model="section" name="location">
                         <option value="Agnar Pyte Center">Agnar Pyte Center</option>
                         <option value="Bingham">Bingham</option>
@@ -46,11 +68,11 @@
                 <div class="col-md-2 form-group label-floating">
                     <label class="control-label">Weekdays</label>
                     <select class="form-control" v-model="section" name="day" id="select" multiple>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
                     </select>
                 </div>
             </div>

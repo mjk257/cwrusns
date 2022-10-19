@@ -1,24 +1,38 @@
 <%- include('partials/header'); -%>
-<% if(currentUser){ %>
-<% if(currentUser.schedule.length > 0) { %>
-<% currentUser.schedule.forEach(function(course){ %>
-<div class="row">
-    <div class="col-md-2"><%= course.name %></div>
-    <div class="col-md-2"><%= course.startTime %> - <%= course.endTime %></div>
-    <div class="col-md-2">
-        <% course.days.forEach(function(day){ %>
-        <p><%= day %>, </p>
-        <% }); %>
-    </div>
-    <div class="col-md-2"><%= course.location %></div>
-</div> <% }); %> <% } else {%> <div class="container-fluid">
-    <a href="/schedule">Input your schedule to get started!</a>
+<% if(currentUser && currentUser.schedule.length > 0){ %>
+<div class="container">
+    <h1>Today's Schedule</h1>
+    <table class="table">
+        <thead>
+            <th scope="col">Class Name</th>
+            <th scope="col">Time</th>
+            <th scope="col">Building</th>
+        </thead>
+        <tbody>
+            <% currentUser.schedule.forEach(function(course){ %>
+            <% if(course.days.includes(new Date().getDay())){ %>
+            <tr>
+                <td scope="row"><%= course.name %></td>
+                <td><%= course.startTime %> - <%= course.endTime %></td>
+                <td><%= course.location %></td>
+            </tr>
+            <% }}) %>
+        </tbody>
+    </table>
+    <a class="btn btn-warning" href="/schedule">Edit Schedule</a>
 </div>
-<% } %>
 <% } else { %>
-<div class="container-fluid">
-    <a href="/schedule">Input your schedule to get started!</a>
+<style>
+    body {
+        background-image: url(./public/images/background.jpg);
+        background-size: cover;
+        text-align: center;
+    }
+</style>
+<div class="mt-4 p-5 text-white rounded" style="background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))">
+    <h1>Get Started by Adding your Schedule</h1>
+    </br>
+    <a class="btn btn-primary" href="/schedule">Click Here</a>
 </div>
-
 <% } %>
 <%- include ('partials/footer'); -%>

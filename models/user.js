@@ -6,7 +6,7 @@ var CourseSchema = new mongoose.Schema({
   startTime: String,
   endTime: String,
   location: String,
-  days: [String]
+  days: [Number]
 })
 
 var UserSchema = new mongoose.Schema({

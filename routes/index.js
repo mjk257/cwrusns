@@ -1,11 +1,7 @@
 var express = require("express"),
   router = express.Router(),
   passport = require("passport"),
-  User = require("../models/user"),
-  async = require("async"),
-    nodemailer = require("nodemailer"),
-    crypto = require("crypto"),
-    middleware = require("../middleware");
+  User = require("../models/user");
 
 router.get("/error", function (req, res) {
   res.render("error");
@@ -14,17 +10,9 @@ router.get("/error", function (req, res) {
 router.get("/", function (req, res) {
   User.findById(req.params.id, function (err, foundUser) {
     if (err) {
-      res.render("index");
+      res.redirect("/error");
     } else {
-      if (foundUser && foundUser.schedule != null) {
-        res.render("index", {
-          schedule: foundUser.schedule
-        })
-      } else {
-        res.render("index", {
-          schedule: Array()
-        });
-      }
+      res.render("index")
     }
   })
 });
@@ -85,80 +73,6 @@ router.get("/logout", function (req, res) {
     if (err) {
       return next(err);
     }
-    res.redirect('/');
-  });
-});
-
-
-
-router.get('/reset/:token', function (req, res) {
-  User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
-    }
-  }, function (err, user) {
-    if (!user) {
-      req.flash('error', 'Password reset token is invalid or has expired.');
-      return res.redirect('/forgot');
-    }
-    res.render('reset', {
-      token: req.params.token
-    });
-  });
-});
-
-router.post('/reset/:token', function (req, res) {
-  async.waterfall([
-    function (done) {
-      User.findOne({
-        resetPasswordToken: req.params.token,
-        resetPasswordExpires: {
-          $gt: Date.now()
-        }
-      }, function (err, user) {
-        if (!user) {
-          req.flash('error', 'Password reset token is invalid or has expired.');
-          return res.redirect('back');
-        }
-        if (req.body.password === req.body.confirm) {
-          user.setPassword(req.body.password, function (err) {
-            user.resetPasswordToken = undefined;
-            user.resetPasswordExpires = undefined;
-
-            user.save(function (err) {
-              req.logIn(user, function (err) {
-                done(err, user);
-              });
-            });
-          })
-        } else {
-          req.flash("error", "Passwords do not match.");
-          return res.redirect('back');
-        }
-      });
-    },
-    function (user, done) {
-      var smtpTransport = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-          user: 'outdoorleadershiphelp@gmail.com',
-          pass: process.env.GMAILPW
-        }
-      });
-      var mailOptions = {
-        to: user.email,
-        from: 'outdoorleadershiphelp@gmail.com',
-        subject: 'Your password has been changed',
-        text: 'Hello,\n\n' +
-          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
-      };
-      smtpTransport.sendMail(mailOptions, function (err) {
-        req.flash('success', 'Success! Your password has been changed.');
-        done(err);
-      });
-    }
-  ], function (err) {
     res.redirect('/');
   });
 });

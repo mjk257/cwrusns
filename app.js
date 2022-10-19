@@ -1,18 +1,17 @@
 var express = require("express"),
   app = express(),
-  fs = require("fs"),
-  multer = require("multer"),
   methodOverride = require("method-override"),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
   flash = require("connect-flash"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
-  passportLocalMongoose = require("passport-local-mongoose"),
-  User = require("./models/user")
+  User = require("./models/user");
 
 var indexRoutes = require("./routes/index"),
-  scheduleRoutes = require("./routes/schedule");
+  scheduleRoutes = require("./routes/schedule"),
+  mapRoutes = require("./routes/map"),
+  reccRoutes = require("./routes/recc");
 
 
 // APP CONFIG
@@ -46,7 +45,7 @@ app.use(express.static(__dirname + '/'));
 
 //PASSPORT CONFIG
 app.use(require("express-session")({
-  secret: "Martin Kovac is the GOAT OL leader",
+  secret: "CSDS 393 Software Engineering Project",
   resave: false,
   saveUninitialized: false
 }));
@@ -63,6 +62,8 @@ app.use(function (req, res, next) {
 
 //ROUTES
 app.use("/schedule", scheduleRoutes);
+app.use("/map", mapRoutes);
+app.use("/reccomendations", reccRoutes);
 app.use(indexRoutes);
 
 
