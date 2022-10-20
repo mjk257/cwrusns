@@ -11,13 +11,15 @@
             <th scope="col">Days</th>
         </thead>
         <tbody>
+            <% const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %>
             <% currentUser.schedule.forEach(function(course){ %>
             <tr>
                 <td scope="row" name="name"><%= course.name %></td>
                 <td><%= course.startTime %> - <%= course.endTime %></td>
                 <td><%= course.location %></td>
-                <td> <% course.days.forEach(function(day){ %>
-                    <%= day %>,
+                <td> <% course.days.forEach(function(day, index){ %>
+                    <%= weekdays[day] %>
+                    <% if(index < course.days.length - 1){ %>,<% } %>
                     <% }); %></td>
                 <td>
                     <form action="/schedule/<%= course._id %>?_method=DELETE" method="POST">
@@ -32,6 +34,7 @@
 </br>
 <% } %>
 <div class="container">
+    <h3>Add a Class to Your Schedule</h3>
     <form id="scheduleForm" action="/schedule" method="POST">
         <div class="form-list">
             <div class="form-row row">
@@ -80,4 +83,5 @@
         <button>Submit</button>
     </form>
 </div>
+
 <%- include('partials/footer') -%>

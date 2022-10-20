@@ -8,17 +8,8 @@ router.get("/error", function (req, res) {
 });
 
 router.get("/", function (req, res) {
-  User.findById(req.params.id, function (err, foundUser) {
-    if (err) {
-      res.redirect("/error");
-    } else {
-      res.render("index")
-    }
-  })
+  res.render("index");
 });
-
-
-
 
 //AUTHENTICATION ROUTES
 router.get("/register", function (req, res) {
@@ -28,12 +19,12 @@ router.get("/register", function (req, res) {
 router.post("/register", function (req, res) {
   if (req.body.password === req.body.passwordC) {
     User.register(new User({
-      email: req.body.email,
+      username: req.body.username,
       schedule: [],
     }), req.body.password, function (err, user) {
       if (err) {
         console.log(err);
-        return res.render("register");
+        res.redirect("/register");
       }
       passport.authenticate("local")(req, res, function () {
         res.redirect("/");

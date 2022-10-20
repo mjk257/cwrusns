@@ -11,7 +11,7 @@ var CourseSchema = new mongoose.Schema({
 
 var UserSchema = new mongoose.Schema({
   password: String,
-  email: {
+  username: {
     type: String,
     unique: true,
     required: true
@@ -20,9 +20,6 @@ var UserSchema = new mongoose.Schema({
 });
 
 UserSchema.plugin(passportLocalMongoose);
-UserSchema.plugin(passportLocalMongoose, {
-  usernameField: 'email'
-});
 
 
 module.exports = mongoose.model("User", UserSchema);

@@ -5,13 +5,7 @@ var express = require("express"),
     middleware = require("../middleware");
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
-    User.findById(req.params.id, function (err, foundUser) {
-        if (err) {
-            res.redirect("/error");
-        } else {
-            res.render("schedule")
-        }
-    })
+    res.render("schedule");
 });
 
 router.post("/", middleware.isLoggedIn, function (req, res) {
@@ -41,13 +35,14 @@ router.delete("/:id", middleware.isLoggedIn, function (req, res) {
     User.updateOne({
         _id: req.user._id
     }, {
-        $pullAll: {
-            schedule: [{
+        $pull: {
+            schedule: {
                 _id: req.params.id
-            }]
+            }
         }
     }, function (err) {
         if (err) {
+            console.log(err)
             res.redirect("/error")
         } else {
             res.redirect("/schedule")
