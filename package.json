@@ -35,13 +35,6 @@
   },
   "homepage": "https://github.com/mjk257/cwrusns#readme",
   "devDependencies": {
-    "jest": {
-      "version": "^29.2.1",
-      "testEnvironment": "node",
-      "coveragePathIgnorePatterns": [
-        "/node_modules/"
-      ]
-    },
     "supertest": "^6.3.0"
   }
 }
