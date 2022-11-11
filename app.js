@@ -73,8 +73,6 @@ app.use(function (req, res, next) {
   res.render("404");
 });
 
-// app.listen(process.env.PORT || 3000, process.env.IP, function () {
-//   console.log("CWRU SNS Server is Running");
-// });
-
-module.exports = app
+app.listen(process.env.PORT || 3000, process.env.IP, function () {
+  console.log("CWRU SNS Server is Running");
+});

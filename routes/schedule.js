@@ -16,19 +16,24 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
         location: req.body.location,
         days: req.body.day
     }
-    User.updateOne({
-        _id: req.user._id
-    }, {
-        $push: {
-            schedule: course
-        }
-    }, function (err, newlyCreated) {
-        if (err) {
-            res.redirect("/error")
-        } else {
-            res.redirect("/schedule")
-        }
-    })
+    if (compTime(req.body.start, req.body.end)) {
+        User.updateOne({
+            _id: req.user._id
+        }, {
+            $push: {
+                schedule: course
+            }
+        }, function (err, newlyCreated) {
+            if (err) {
+                res.redirect("/error")
+            } else {
+                res.redirect("/schedule")
+            }
+        })
+    } else {
+        res.redirect("/schedule")
+        req.flash("error", "Start time must be before end time");
+    }
 });
 
 router.delete("/:id", middleware.isLoggedIn, function (req, res) {
@@ -49,5 +54,13 @@ router.delete("/:id", middleware.isLoggedIn, function (req, res) {
         }
     })
 });
+
+function compTime(time1, time2) {
+    var a1 = time1.split(':');
+    var time1Seconds = (+a1[0]) * 60 * 60 + (+a1[1]) * 60;
+    var a2 = time2.split(':');
+    var time2Seconds = (+a2[0]) * 60 * 60 + (+a2[1]) * 60;
+    return time1Seconds < time2Seconds;
+}
 
 module.exports = router;

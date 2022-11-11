@@ -1,2 +1,36 @@
 <%- include('partials/header'); -%>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<% 
+function compTime(time) {
+    var a = time.split(':');
+    var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60;
+    var date = new Date();
+    var dateTime = date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
+    return seconds > dateTime;
+}
+%>
+<div class="container">
+    <div class="row">
+        <div id="map" class="col-8"></div>
+        <% if(currentUser && currentUser.schedule.length > 0) { %>
+        <div class="col-4" id="schedule">
+            <h3>Today's Classes</h3>
+            <% currentUser.schedule.forEach(function(course){ %>
+            <% if(course.days.includes(new Date().getDay()) && compTime(course.startTime)){ %>
+            <% var building = locations.find(({ name }) => name === course.location) %>
+            <div class="row">
+                <span><%= course.name %> - <%= course.location %></span>
+                <span><%= course.startTime %> - <%= course.endTime %></span>
+                <span><button class="btn btn-primary"
+                        onclick="route('<%= building.lat %>', '<%= building.long %>', '<%= building.images[0] %>')">Directions</a></span>
+            </div>
+            <% }}) %>
+        </div>
+        <% } %>
+    </div>
+</div>
+<script src="scripts/map.js"></script>
 <%- include ('partials/footer'); -%>
