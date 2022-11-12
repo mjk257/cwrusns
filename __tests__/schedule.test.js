@@ -1,24 +1,17 @@
+const middleware = require("../middleware");
+const sinon = require('sinon');
+const User = require("../models/User")
+
+const originalIsLoggedIn = middleware.isLoggedIn;
+const loggedInStub = sinon.stub(middleware, 'isLoggedIn')
+
 const request = require('supertest');
 const app = require('../app');
 
-function authorize() {
-    request(app)
-        .post('/auth/local')
-        .send({
-            email: 'mjk257@case.edu',
-            password: 'test'
-        })
-        .end(function (err, res) {
-            if (err) {
-                return done(err);
-            }
-            return res.body.token;
-        });
-}
-
 describe('GET /schedule not logged in', () => {
     it('Should redirect', () => {
-        request(app)
+        middleware.isLoggedIn.callsFake(originalIsLoggedIn);
+        return request(app)
             .get("/schedule")
             .expect(302)
             .expect('Location', '/login')
@@ -27,38 +20,47 @@ describe('GET /schedule not logged in', () => {
 
 describe('GET /schedule logged in', () => {
     it('Should render schedule.ejs', () => {
-        token = authorize()
-        request(app)
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
             .get("/schedule")
-            .set('Authorization', 'Bearer ' + token)
             .expect(200)
     })
-
-})
+});
 
 describe('POST /schedule', () => {
     it('Should redirect to schedule if successful', () => {
-        request(app)
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
             .post("/schedule")
             .send({
                 name: "CSDS 393",
-                startTime: "10:00",
-                endTime: "11:15",
+                start: "10:00",
+                end: "11:15",
                 location: "White",
-                days: [2, 4]
+                day: [2, 4]
             })
             .expect(302)
             .expect('Location', '/schedule')
     })
-    it('Should redirect to error if successful', () => {
-        request(app)
+    it('Should redirect to error if unsuccessful', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
             .post("/schedule")
             .send({
                 name: "",
-                startTime: "10:00",
-                endTime: "11:15",
+                start: "10:00",
+                end: "11:15",
                 location: "White",
-                days: [2, 4]
+                day: [2, 4]
             })
             .expect(302)
             .expect('Location', '/error')
@@ -67,7 +69,11 @@ describe('POST /schedule', () => {
 
 describe('DELETE /schedule/:id', () => {
     it('Should redirect to schedule if successful', () => {
-        request(app)
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
             .delete("/schedule/:id")
             .send({
                 _id: "testID"
@@ -77,7 +83,11 @@ describe('DELETE /schedule/:id', () => {
     })
 
     it('Should redirect to error if unsuccessful', () => {
-        request(app)
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
             .delete("/schedule/:id")
             .send({
                 _id: ""

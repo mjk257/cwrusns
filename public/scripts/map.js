@@ -12,7 +12,7 @@ function renderMap(position) {
 }
 
 function route(lat, long, img) {
-    var position = navigator.geolocation.getCurrentPosition(function (position) {
+    navigator.geolocation.getCurrentPosition(function (position) {
         L.Routing.control({
             waypoints: [
                 L.latLng(position.coords.latitude, position.coords.longitude),

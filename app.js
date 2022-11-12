@@ -2,7 +2,6 @@ var express = require("express"),
   app = express(),
   methodOverride = require("method-override"),
   bodyParser = require("body-parser"),
-  mongoose = require("mongoose"),
   flash = require("connect-flash"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
@@ -13,24 +12,10 @@ var indexRoutes = require("./routes/index"),
   mapRoutes = require("./routes/map"),
   reccRoutes = require("./routes/recc");
 
+require("./connection");
+
 
 // APP CONFIG
-mongoose.connect("mongodb://localhost:27017/cwru_sns", {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
-});
-// mongoose.connect("mongodb+srv://admin:W1llmgEj0SdeZTQw@cluster0.rlpardo.mongodb.net/?retryWrites=true&w=majority", {
-//   useNewUrlParser: true,
-//   useCreateIndex: true,
-//   useFindAndModify: false,
-//   useUnifiedTopology: true
-// }).then(() => {
-//   console.log("Connected to DB");
-// }).catch(err => {
-//   console.log("ERROR:", err.message);
-// });
 app.set("view engine", "ejs");
 app.use('/scripts', express.static(__dirname + '/node_modules'));
 app.use(express.static("public"));
@@ -73,6 +58,4 @@ app.use(function (req, res, next) {
   res.render("404");
 });
 
-app.listen(process.env.PORT || 3000, process.env.IP, function () {
-  console.log("CWRU SNS Server is Running");
-});
+module.exports = app;
