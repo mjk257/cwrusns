@@ -2,12 +2,6 @@ const request = require('supertest');
 const User = require('../models/user');
 const passport = require('passport');
 const sinon = require('sinon');
-
-// sinon.stub(passport, 'authenticate').returns(function (req, res, next) {
-//     res.redirect('/');
-// });
-
-
 const app = require('../app');
 
 describe('GET /', () => {

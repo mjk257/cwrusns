@@ -20,6 +20,7 @@ app.set("view engine", "ejs");
 app.use('/scripts', express.static(__dirname + '/node_modules'));
 app.use(express.static("public"));
 app.use(express.static("uploads"));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));

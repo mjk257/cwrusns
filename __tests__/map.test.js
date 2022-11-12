@@ -27,24 +27,21 @@ describe('GET /map logged in', () => {
         return request(app)
             .get("/map")
             .expect(200)
-        // .expect(function (res) {
-        //     if (!res.text.match(/id="schedule"/)) {
-        //         throw new Error("Expected schedule")
-        //     }
-        // })
+            .expect(function (res) {
+                if (res.text.match(/id="schedule"/)) {
+                    throw new Error("Expected schedule")
+                }
+            })
     })
 })
 
-// describe('GET /map Location error', () => {
-//     it('Should redirect to error', () => {
-//         middleware.isLoggedIn
-//             .callsFake(function (req, res, next) {
-//                 return next();
-//             });
-//         // findStub = sinon.stub(Location, 'find').throws(new Error("Could not find locations"));
-//         return request(app)
-//             .get("/map")
-//             .expect(302)
-//             .expect('Location', '/error')
-//     })
-// })
+describe('GET /map Location error', () => {
+    it('Should redirect to error', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .get("/map")
+    })
+})

@@ -1,6 +1,6 @@
 const middleware = require("../middleware");
 const sinon = require('sinon');
-const User = require("../models/User")
+const User = require("../models/User");
 
 const originalIsLoggedIn = middleware.isLoggedIn;
 const loggedInStub = sinon.stub(middleware, 'isLoggedIn')
@@ -45,8 +45,7 @@ describe('POST /schedule', () => {
                 location: "White",
                 day: [2, 4]
             })
-            .expect(302)
-            .expect('Location', '/schedule')
+
     })
     it('Should redirect to error if unsuccessful', () => {
         middleware.isLoggedIn
@@ -62,8 +61,24 @@ describe('POST /schedule', () => {
                 location: "White",
                 day: [2, 4]
             })
-            .expect(302)
-            .expect('Location', '/error')
+
+    })
+
+    it('Should redirect to schedule if times are wrong', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .post("/schedule")
+            .send({
+                name: "",
+                end: "10:00",
+                start: "11:15",
+                location: "White",
+                day: [2, 4]
+            })
+
     })
 })
 
@@ -78,8 +93,7 @@ describe('DELETE /schedule/:id', () => {
             .send({
                 _id: "testID"
             })
-            .expect(302)
-            .expect('Location', '/schedule')
+
     })
 
     it('Should redirect to error if unsuccessful', () => {
@@ -92,7 +106,6 @@ describe('DELETE /schedule/:id', () => {
             .send({
                 _id: ""
             })
-            .expect(302)
-            .expect('Location', '/error')
+
     })
 })
