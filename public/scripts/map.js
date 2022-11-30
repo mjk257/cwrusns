@@ -14,14 +14,14 @@ function renderMap(position) {
 
 function route(lat, long, img) {
     var divelement = document.getElementById("route");
-
-    while (divelement.firstChild) {
-        divelement.removeChild(divelement.lastChild);
-    }
-
-    if (routingControl != null) {
-        map.removeControl(routingControl);
-        routingControl = null;
+    if (divelement.hasChildNodes()) {
+        while (divelement.firstChild) {
+            divelement.removeChild(divelement.lastChild);
+        }
+        if (routingControl != null) {
+            map.removeControl(routingControl);
+            routingControl = null;
+        }
     }
 
     navigator.geolocation.getCurrentPosition(function (position) {

@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-<script src="scripts/map.js"></script>
+<script src="/scripts/map.js"></script>
 <% 
 var viewDate = new Date().getDay();
 var todayDate = new Date().getDay();
@@ -14,32 +14,30 @@ function compTime(time) {
     var dateTime = date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
     return seconds > dateTime;
 }
-%>
+if (typeof location != "undefined") { %>
+<script defer>
+    window.onload = function () {
+        route("<%= location.lat %>", "<%= location.long %>", "<%= location.images[0] %>");
+    };
+</script>
+<% } %>
 <div class="container row">
     <div class="col-2">
         <form action="/map" method="POST">
-            <label class="control-label">Location</label>
+            <label class="control-label" for="destination">Location</label>
             <select class="form-control" v-model="section" name="destination">
-                <% locations.forEach(function(location){
+                <% locations.forEach(function(location){ %>
                 <option value="<%= location.name %>"><%= location.name %></option>
                 <% }) %>
             </select>
-            <button
-                onclick="route('<%= destination.lat %>', '<%= destination.long %>', '<%= destination.images[0] %>')">Route</button>
+            <button>Route</button>
         </form>
     </div>
     <div id="map" class="col-6"></div>
-    <% if(currentUser && currentUser.schedule.length > 0) { %>
     <div class="col-4" id="schedule">
+        <% if(currentUser && currentUser.schedule.length > 0) { %>
         <div class="d-flex justify-content-center">
             <h3>Today's Classes</h3>
-            <% if(viewDate == todayDate){ %>
-            <button class="btn btn-primary" onclick="'<% viewDate += 1 %>'">View Tomorrow's
-                Classes</button></span>
-            <% } %>
-            <% if(viewDate != todayDate){ %>
-            <button class="btn btn-primary" onclick="'<% viewDate -= 1 %>'">View Today's Classes</button></span>
-            <% } %>
         </div>
         <% currentUser.schedule.forEach(function(course){ %>
         <% if(course.days.includes(viewDate) && compTime(course.startTime)){ %>
@@ -51,17 +49,15 @@ function compTime(time) {
                     onclick="route('<%= building.lat %>', '<%= building.long %>', '<%= building.images[0] %>')">Directions</a></span>
         </div>
         </br>
-        <% }}) %>
+        <% }})} else { %>
+        <div class="d-flex">
+            <h5>Please login to view directions to your classes.</h5>
+            <a class="btn btn-primary btm-sm" href="login">Login</a>
+        </div>
+
+        <% } %>
         <div id="route"></div>
     </div>
-
-    <% } else {%>
-    <div class="col-4">
-        <h4>Login to View Directions to Your Classes</h4>
-        <a class="btn btn-primary" href="login">Login</a>
-    </div>
-
-    <% } %>
 </div>
 
 <%- include ('partials/footer'); -%>

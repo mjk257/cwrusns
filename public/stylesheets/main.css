@@ -73,3 +73,10 @@ tr:nth-child(even) {
 #map {
   height: 500px;
 }
+
+.img-recc {
+  float: left;
+  width: 200px;
+  height: 200px;
+  background-size: cover;
+}
