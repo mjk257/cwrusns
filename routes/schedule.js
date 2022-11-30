@@ -2,10 +2,21 @@ var express = require("express"),
     router = express.Router(),
     passport = require("passport"),
     User = require("../models/user"),
+    Location = require("../models/location"),
     middleware = require("../middleware");
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
-    res.render("schedule");
+    Location.find({}).sort({
+        name: 1
+    }).exec(function (err, foundLocations) {
+        if (err) {
+            res.redirect("/error");
+        } else {
+            res.render("schedule", {
+                locations: foundLocations
+            });
+        }
+    })
 });
 
 router.post("/", middleware.isLoggedIn, function (req, res) {

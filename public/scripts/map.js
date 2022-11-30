@@ -1,5 +1,6 @@
 var position = navigator.geolocation.getCurrentPosition(renderMap);
 var map;
+var routingControl = null;
 
 function renderMap(position) {
     map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
@@ -12,8 +13,19 @@ function renderMap(position) {
 }
 
 function route(lat, long, img) {
+    var divelement = document.getElementById("route");
+
+    while (divelement.firstChild) {
+        divelement.removeChild(divelement.lastChild);
+    }
+
+    if (routingControl != null) {
+        map.removeControl(routingControl);
+        routingControl = null;
+    }
+
     navigator.geolocation.getCurrentPosition(function (position) {
-        L.Routing.control({
+        routingControl = L.Routing.control({
             waypoints: [
                 L.latLng(position.coords.latitude, position.coords.longitude),
                 L.latLng(lat, long)
@@ -29,7 +41,6 @@ function route(lat, long, img) {
     var titletag = document.createElement("h3");
     titletag.appendChild(document.createTextNode("Destination:"));
 
-    var divelement = document.getElementById("schedule");
     divelement.appendChild(titletag);
     divelement.appendChild(imagetag);
 }
