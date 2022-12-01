@@ -32,9 +32,15 @@
 <div class="mt-4 p-5 text-white rounded" style="background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))">
     <h1>Welcome to CWRU SNS!</h1>
     </br>
-    <h3>Get started by logging in and adding a schedule</h3>
+    <% if(!currentUser){ %>
+    <h3>Get started by logging in.</h3>
+    </br>
+    <a class="btn btn-primary" href="/login">Click Here</a>
+    <% } else if(currentUser.schedule.length == 0){ %>
+    <h3>Create a Schedule!</h3>
     </br>
     <a class="btn btn-primary" href="/schedule">Click Here</a>
+    <% } %>
 </div>
 <% } %>
 <%- include ('partials/footer'); -%>

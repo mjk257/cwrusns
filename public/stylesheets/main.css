@@ -80,3 +80,8 @@ tr:nth-child(even) {
   height: 200px;
   background-size: cover;
 }
+
+.error {
+  color: #D8000C;
+  background-color: #FFBABA;
+}

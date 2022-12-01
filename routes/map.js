@@ -11,13 +11,14 @@ router.get("/", function (req, res) {
             res.redirect("/error");
         } else {
             res.render("map", {
-                locations: foundLocations
+                locations: foundLocations,
+                day: new Date().getDay()
             });
         }
     })
 });
 
-router.get("/:id", function (req, res) {
+router.get("/location/:id", function (req, res) {
     Location.find({}).sort({
         name: 1
     }).exec(function (err, foundLocations) {
@@ -29,8 +30,24 @@ router.get("/:id", function (req, res) {
             }) => _id == req.params.id);
             res.render("map", {
                 locations: foundLocations,
-                location: location
+                location: location,
+                day: new Date().getDay()
             })
+        }
+    })
+})
+
+router.get("/day/:day", function (req, res) {
+    Location.find({}).sort({
+        name: 1
+    }).exec(function (err, foundLocations) {
+        if (err) {
+            res.redirect("/error");
+        } else {
+            res.render("map", {
+                locations: foundLocations,
+                day: req.params.day
+            });
         }
     })
 })
@@ -47,7 +64,8 @@ router.post("/", function (req, res) {
             }) => name == req.body.destination);
             res.render("map", {
                 locations: foundLocations,
-                location: location
+                location: location,
+                day: new Date().getDay()
             })
         }
     })

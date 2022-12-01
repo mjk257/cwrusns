@@ -12,7 +12,7 @@ function renderMap(position) {
     marker.bindPopup('<p>Current Location</p>').openPopup();
 }
 
-function route(lat, long, img) {
+function route(lat, long, img, name) {
     var divelement = document.getElementById("route");
     if (divelement.hasChildNodes()) {
         while (divelement.firstChild) {
@@ -34,13 +34,17 @@ function route(lat, long, img) {
     });
 
     var imagetag = document.createElement("img");
-    var imageurl = "../images/buildingpics/" + img;
+    var imageurl = "/../images/buildingpics/" + img;
     imagetag.setAttribute("src", imageurl);
     imagetag.setAttribute("class", "img-fluid");
 
     var titletag = document.createElement("h3");
     titletag.appendChild(document.createTextNode("Destination:"));
 
+    var nametag = document.createElement("h4");
+    nametag.appendChild(document.createTextNode(name));
+
     divelement.appendChild(titletag);
+    divelement.appendChild(nametag);
     divelement.appendChild(imagetag);
 }

@@ -4,8 +4,7 @@
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="/scripts/map.js"></script>
-<% 
-var viewDate = new Date().getDay();
+<%
 var todayDate = new Date().getDay();
 function compTime(time) {
     var a = time.split(':');
@@ -17,43 +16,59 @@ function compTime(time) {
 if (typeof location != "undefined") { %>
 <script defer>
     window.onload = function () {
-        route("<%= location.lat %>", "<%= location.long %>", "<%= location.images[0] %>");
+        route("<%= location.lat %>", "<%= location.long %>", "<%= location.images[0] %>", "<%= location.name %>");
     };
 </script>
 <% } %>
 <div class="container row">
     <div class="col-2">
         <form action="/map" method="POST">
-            <label class="control-label" for="destination">Location</label>
-            <select class="form-control" v-model="section" name="destination">
-                <% locations.forEach(function(location){ %>
-                <option value="<%= location.name %>"><%= location.name %></option>
-                <% }) %>
-            </select>
-            <button>Route</button>
+            <div class="form-group">
+                <label class="form-label" for="destination">
+                    <h4>Location:</h4>
+                </label>
+                <select class="form-control" v-model="section" name="destination">
+                    <% locations.forEach(function(location){ %>
+                    <option value="<%= location.name %>"><%= location.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            </br>
+            <button class="btn btn-primary">Route</button>
         </form>
     </div>
-    <div id="map" class="col-6"></div>
-    <div class="col-4" id="schedule">
+    <div id="map" class="col-7"></div>
+    <div class="col-3" id="schedule">
         <% if(currentUser && currentUser.schedule.length > 0) { %>
-        <div class="d-flex justify-content-center">
-            <h3>Today's Classes</h3>
+        <% if(day == todayDate){ %>
+        <h3>Today's Remaining Classes</h3>
+        <div class="container">
+            <a class="btn btn-info" href="/map/day/<%= Number(day) + 1 %>">View Tomorrow's Classes</a>
         </div>
-        <% currentUser.schedule.forEach(function(course){ %>
-        <% if(course.days.includes(viewDate) && compTime(course.startTime)){ %>
-        <% var building = locations.find(({ name }) => name === course.location) %>
-        <div class="row">
-            <span><%= course.name %> - <%= course.location %></span>
-            <span><%= course.startTime %> - <%= course.endTime %></span>
-            <span><button class="btn btn-primary"
-                    onclick="route('<%= building.lat %>', '<%= building.long %>', '<%= building.images[0] %>')">Directions</a></span>
+        <% } else { %>
+        <h3>Tomorrow's Classes</h3>
+        <div class="container">
+            <a class="btn btn-info" href="/map/day/<%= Number(day) - 1 %>">View Today's Classes</a>
         </div>
         </br>
-        <% }})} else { %>
-        <div class="d-flex">
-            <h5>Please login to view directions to your classes.</h5>
-            <a class="btn btn-primary btm-sm" href="login">Login</a>
+        <% } %>
+
+        <% currentUser.schedule.forEach(function(course){ %>
+        <% if(course.days.includes(day)){ 
+            if((day == todayDate && compTime(course.startTime)) || (day != todayDate)){
+                var building = locations.find(({ name }) => name === course.location) %>
+        <div class="row">
+            <h6><%= course.name %> - <%= course.location %></h6>
+            <h6><%= course.startTime %> - <%= course.endTime %></h6>
+            <button class="btn btn-primary"
+                onclick="route('<%= building.lat %>', '<%= building.long %>', '<%= building.images[0] %>', '<%= building.name %>')">Directions</a>
         </div>
+        </br>
+        <% }}})} else { %>
+        <div class="d-flex">
+            <h4>Please login to view directions to your classes.</h4>
+        </div>
+        <a class="btn btn-primary btm-sm" href="login">Login</a>
 
         <% } %>
         <div id="route"></div>
