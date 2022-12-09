@@ -54,6 +54,8 @@ describe('POST /register', () => {
                 password: 'password',
                 passwordC: 'password'
             })
+            .expect(302)
+            .expect('Location', '/')
     })
 
     it('Should redirect to register on failure', () => {
@@ -88,6 +90,8 @@ describe('POST /login', () => {
                 username: 'test@test.edu',
                 password: 'test'
             })
+            .expect(302)
+            .expect('Location', '/')
     })
 
 })

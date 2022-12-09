@@ -45,6 +45,8 @@ describe('POST /schedule', () => {
                 location: "White",
                 day: [2, 4]
             })
+            .expect(302)
+            .expect('Location', '/schedule')
 
     })
     it('Should redirect to error if unsuccessful', () => {
@@ -61,6 +63,8 @@ describe('POST /schedule', () => {
                 location: "White",
                 day: [2, 4]
             })
+            .expect(302)
+            .expect('Location', '/error')
 
     })
 
@@ -78,6 +82,8 @@ describe('POST /schedule', () => {
                 location: "White",
                 day: [2, 4]
             })
+            .expect(302)
+            .expect('Location', '/schedule')
 
     })
 })
@@ -93,6 +99,8 @@ describe('DELETE /schedule/:id', () => {
             .send({
                 _id: "testID"
             })
+            .expect(302)
+            .expect('Location', '/schedule')
 
     })
 
@@ -106,6 +114,8 @@ describe('DELETE /schedule/:id', () => {
             .send({
                 _id: ""
             })
+            .expect(302)
+            .expect('Location', '/error')
 
     })
 })

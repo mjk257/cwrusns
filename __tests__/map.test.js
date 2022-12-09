@@ -43,5 +43,83 @@ describe('GET /map Location error', () => {
             });
         return request(app)
             .get("/map")
+            .expect(302)
+            .expect('Location', '/error')
+    })
+})
+
+describe('GET /map/:id', () => {
+    it('Should render map with valid id', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .get("/map/636d7780ead809b722495f18")
+            .expect(200)
+    })
+
+    it('Should redirect to error with invalid id', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .get("/map/invalid")
+            .expect(302)
+            .expect('Location', '/error')
+    })
+
+})
+
+describe('GET /day/:day', () => {
+    it('Should render map with valid day', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .get("/map/day/1")
+            .expect(200)
+    })
+
+    it('Should redirect to error with invalid day', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .get("/map/day/invalid")
+            .expect(302)
+            .expect('Location', '/error')
+    })
+})
+
+describe('POST /map', () => {
+    it('Should render map with valid body', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .post("/map")
+            .send({
+                destination: 'Kent Hale Smith'
+            })
+            .expect(200)
+    })
+
+    it('Should redirect to error with invalid body', () => {
+        middleware.isLoggedIn
+            .callsFake(function (req, res, next) {
+                return next();
+            });
+        return request(app)
+            .post("/map")
+            .send({
+                destination: 'Error'
+            })
+            .expect(302)
+            .expect('Location', '/error')
     })
 })
